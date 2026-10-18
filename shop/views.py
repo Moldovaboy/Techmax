@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from . models import *
 from django.http import JsonResponse
 import json
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -69,3 +69,7 @@ def loginSeite(request):
           else:
                messages.error(request, 'Benutzername oder Passwort nicht korrekt.')
      return render(request, 'shop/login.html')
+
+def logoutBenutzer(request):
+    logout(request)
+    return redirect('shop')
