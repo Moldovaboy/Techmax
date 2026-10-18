@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . models import *
 from django.http import JsonResponse
 import json
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -54,3 +55,17 @@ def artikelBackend(request):
           bestellteArtikel.delete()
 
      return JsonResponse("Artikel hinzugefügt", safe=False)
+
+def loginSeite(request):
+     if request.method == 'POST':
+          benutzername = request.POST['benutzername']
+          passwort = request.POST['passwort']
+          
+          benutzer = authenticate(request, username=benutzername, password=passwort)
+          
+          if benutzer is not None:
+               login(request, benutzer)
+               return redirect('shop')
+          else:
+               messages.error(request, 'Benutzername oder Passwort nicht korrekt.')
+     return render(request, 'shop/login.html')
