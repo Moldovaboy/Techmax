@@ -3,6 +3,7 @@ from . models import *
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm 
 
 # Create your views here.
 
@@ -57,6 +58,7 @@ def artikelBackend(request):
      return JsonResponse("Artikel hinzugefügt", safe=False)
 
 def loginSeite(request):
+     seite = 'login'
      if request.method == 'POST':
           benutzername = request.POST['benutzername']
           passwort = request.POST['passwort']
@@ -68,8 +70,14 @@ def loginSeite(request):
                return redirect('shop')
           else:
                messages.error(request, 'Benutzername oder Passwort nicht korrekt.')
-     return render(request, 'shop/login.html')
+     return render(request, 'shop/login.html', {'seite': seite})
 
 def logoutBenutzer(request):
     logout(request)
     return redirect('shop')
+
+def regBenutzer(request):
+     seite = 'reg'
+     form = UserCreationForm
+     ctx = {'form': form, 'seite': seite}
+     return render(request, 'shop/login.html', ctx)
