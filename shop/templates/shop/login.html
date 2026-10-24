@@ -2,20 +2,31 @@
 
 
 {% block content %}
-    <div>
-        <form method='POST' action="">
-            {% csrf_token %}
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Benutzername</label>
-                    <input type="text" name="benutzername" class="form-control" id="exampleInputEmail1">                    
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Passwort</label>
-                    <input type="password" name="passwort" class="form-control" id="exampleInputPassword1">
-                </div>
-                <button type="submit" class="btn btn-secondary">Login</button>            
-        </form>
-    </div>
-
-
+{% if seite == 'login' %}
+<div>
+    <form method='POST' action="">
+        {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Benutzername</label>
+                <input type="text" name="benutzername" class="form-control" id="exampleInputEmail1">                    
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Passwort</label>
+                <input type="password" name="passwort" class="form-control" id="exampleInputPassword1">
+            </div>
+            <button type="submit" class="btn btn-secondary">Login</button>            
+            <hr>
+            <p>Noch kein Account? <a href="{% url 'reg' %}" class="link-success">Registrieren</a></p> 
+    </form>
+</div>
+{% else %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="btn btn-secondary">Registrieren</button>                 
+        <hr>
+        <p>Schon einen Account? <a href="{% url 'login' %}" class="link-success">Login</a></p>
+    </form>    
+{% endif %}    
 {% endblock content %}
