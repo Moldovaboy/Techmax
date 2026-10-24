@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from . models import *
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+
 
 # Create your views here.
 
@@ -68,8 +71,31 @@ def loginSeite(request):
                return redirect('shop')
           else:
                messages.error(request, 'Benutzername oder Passwort nicht korrekt.')
-     return render(request, 'shop/login.html')
+     return render(request, 'shop/login.html', {'seite': 'login'})
 
 def logoutBenutzer(request):
     logout(request)
     return redirect('shop')
+
+def regBenutzer(request):
+    seite = 'reg'
+    form = UserCreationForm
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+           benutzer = form.save(commit=False)
+           benutzer.save()
+
+           kunde = Kunde(name=request.POST['username'], benutzer=benutzer)
+           kunde.save()
+           bestellung = Bestellung(kunde=kunde)
+           bestellung.save()
+
+           login(request, benutzer)
+           return redirect('shop')
+        else:
+            messages.error(request, "Fehlerhafte Eingabe!")
+
+    ctx = {'form': form, 'seite': seite}
+    return render(request, 'shop/login.html', ctx)
