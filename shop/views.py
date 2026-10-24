@@ -6,7 +6,6 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-
 # Create your views here.
 
 def shop(request):
@@ -60,6 +59,7 @@ def artikelBackend(request):
      return JsonResponse("Artikel hinzugefügt", safe=False)
 
 def loginSeite(request):
+     seite = 'login'
      if request.method == 'POST':
           benutzername = request.POST['benutzername']
           passwort = request.POST['passwort']
